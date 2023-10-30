@@ -21,6 +21,18 @@ def load(dir_path: str) -> dict[str, Surface]:
     return sprites
 
 
+def load_sprite(file_path: str) -> Surface:
+    """Loads the sprite from the given file path.
+
+        :param file_path: The file path of the sprite.
+        :type file_path: str.
+
+        :return: The sprite.
+        :rtype: Surface.
+
+    """
+    return image.load(file_path).convert_alpha()
+
 def resize(to_resize: Surface, ratio: float) -> Surface:
     """Resizes the given surface by the given ratio.
 

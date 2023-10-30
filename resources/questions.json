@@ -1,1 +1,8 @@
-[{"text": "Quelle est la capitale de la France ?", "answers": {"Paris": true, "Lyon": false, "Marseille": false, "Lille": false}}]
+[
+  {"text": "Quelle est la capitale de la France ?", "answers": {"Paris": true, "Lyon": false, "Marseille": false, "Lille": false}},
+  {"text": "Test0", "answers": {"1": true, "2": false, "3": false}},
+  {"text": "Test1", "answers": {"1": true, "2": false, "3": false}},
+  {"text": "Test2", "answers": {"1": true, "2": false, "3": false}},
+  {"text": "Test3", "answers": {"1": true, "2": false, "3": false}},
+  {"text": "Test4", "answers": {"1": true, "2": false, "3": false}}
+]
