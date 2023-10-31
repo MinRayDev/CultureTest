@@ -63,5 +63,5 @@ class Game:
             if not question.past:
                 return question
 
-    def game_over(self):
+    def game_over(self) -> None:
         self.run = False

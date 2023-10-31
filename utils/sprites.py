@@ -46,7 +46,7 @@ def resize(to_resize: Surface, ratio: float) -> Surface:
     return pygame.transform.scale(to_resize, (to_resize.get_width() * ratio, to_resize.get_height() * ratio))
 
 
-def get_coordinates_with_scroll(surface: Surface, x: int, y: int) -> tuple[int, int]:
+def get_coordinates_with_scroll(surface: Surface, x: int, y: int, parallax_ratio: float = 1) -> tuple[int, int]:
     """Get the coordinates with the scroll of the current level.
 
         :param surface:
@@ -54,6 +54,8 @@ def get_coordinates_with_scroll(surface: Surface, x: int, y: int) -> tuple[int, 
         :type x: int.
         :param y: The y position to draw at.
         :type y: int.
+        :param parallax_ratio: The parallax ratio.
+        :type parallax_ratio: float.
 
         :return: The coordinates.
         :rtype: tuple[int, int].
@@ -61,12 +63,12 @@ def get_coordinates_with_scroll(surface: Surface, x: int, y: int) -> tuple[int, 
     """
     import references
     return (
-        x + surface.get_width() // 2 + references.game.scroll[0] - references.player.width // 2,
-        y + surface.get_height() // 2 + references.game.scroll[1] - references.player.height // 2
+        x + surface.get_width() // 2 + int(references.game.scroll[0] * parallax_ratio) - references.player.width // 2,
+        y + surface.get_height() // 2 + int(references.game.scroll[1] * parallax_ratio) - references.player.height // 2
     )
 
 
-def draw_with_scroll(surface: Surface, to_draw: Surface, x: int, y: int) -> None:
+def draw_with_scroll(surface: Surface, to_draw: Surface, x: int, y: int, parallax_raito: float = 1) -> None:
     """Draws a surface with the scroll of the current level.
 
         :param surface: The surface to draw on.
@@ -77,6 +79,8 @@ def draw_with_scroll(surface: Surface, to_draw: Surface, x: int, y: int) -> None
         :type x: int.
         :param y: The y position to draw at.
         :type y: int.
+        :param parallax_raito: The parallax ratio.
+        :type parallax_raito: float.
 
     """
-    surface.blit(to_draw, get_coordinates_with_scroll(surface, x, y))
+    surface.blit(to_draw, get_coordinates_with_scroll(surface, x, y, parallax_raito))

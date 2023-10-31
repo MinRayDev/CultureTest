@@ -1,8 +1,9 @@
+import pygame.transform
 from pygame import Surface
 
 import references
 from ui.element.impl.text import Text
-from utils.sprites import load, resize, draw_with_scroll
+from utils.sprites import load, resize
 
 
 class HUD:
@@ -18,16 +19,14 @@ class HUD:
         self.elems = []
         self.sprites = {}
         sprites = load("resources/hud")
-        self.forest_mask = sprites["forest_mask"]
-        for px in range(self.forest_mask.get_width()):
-            for py in range(self.forest_mask.get_height()):
-                if self.forest_mask.get_at((px, py)) == (0, 0, 0, 255):
-                    i: int = 30
-                    self.forest_mask.set_at((px, py), (i, i, i, 120))
-                else:
-                    self.forest_mask.set_at((px, py), (0, 0, 0, 0))
         for key, value in sprites.items():
             self.sprites[key] = resize(value, 4)
+        # self.forest_shadow = pygame.mask.from_surface(sprites["forest_mask"]).to_surface()
+        self.forest_shadow = sprites["forest_mask"]
+        self.forest_shadows = []
+        i: int = 30
+        pygame.transform.threshold(self.forest_shadow, self.forest_shadow, (255, 255, 255, 255), (1, 1, 1, 255), (i, i, i, 120))
+        pygame.transform.threshold(self.forest_shadow, self.forest_shadow, (i, i, i, 120), (1, 1, 1, 255), (0, 0, 0, 0))
 
     def draw(self, surface: Surface) -> None:
         """Draws the HUD on the screen.
