@@ -30,6 +30,15 @@ class OutlinedText(Text):
         self.update()
         
     def render(self, content: str = None) -> Surface:
+        """Renders the text with an outline.
+
+            The code for this method was taken from the following website:
+            https://www.pygame.org/pcr/hollow_outline/index.php
+
+            :param content: The text to render.
+            :return: The rendered text.
+
+        """
         if content is None:
             content = self.content
         if content == "":
