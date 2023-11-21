@@ -9,5 +9,5 @@ CultureTest is a game based on the legend of Zelda A link to the past textures. 
 
 
 ## Contributor
-> [SSrecko](https://github.com/SSrecko)
+[SSrecko](https://github.com/SSrecko)
 > ![Avatar](https://avatars.githubusercontent.com/u/149122185?v=1)
