@@ -39,7 +39,6 @@ class MainMenu(Menu):
         title: Surface = self.sprites["title"]
         self.title = Title(title, self.sprites["title_over"], get_center(title))
         self.sword = Sword(self.sprites["sword"], int(background.get_width()/5.5) + self.background.x)
-
         self.shine_index = 0
         self.shine_end = 0
         # time: count, pos
