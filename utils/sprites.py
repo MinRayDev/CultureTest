@@ -68,10 +68,10 @@ def get_coordinates_with_scroll(surface: Surface, x: int, y: int, parallax_ratio
         :rtype: tuple[int, int].
 
     """
-    import references
+    from references import game
     return (
-        x + surface.get_width() // 2 + int(references.game.scroll[0] * parallax_ratio) - references.game.player.width // 2,
-        y + surface.get_height() // 2 + int(references.game.scroll[1] * parallax_ratio) - references.game.player.height // 2
+        x + surface.get_width() // 2 + int(game.scroll[0] * parallax_ratio) - game.player.width // 2,
+        y + surface.get_height() // 2 + int(game.scroll[1] * parallax_ratio) - game.player.height // 2
     )
 
 
@@ -103,7 +103,6 @@ def get_center(element: Surface | pygame.Rect) -> tuple[int, int]:
         :rtype: tuple[int, int].
 
     """
-    import references
     width: Optional[int] = None
     height: Optional[int] = None
     if isinstance(element, pygame.Rect):
@@ -114,9 +113,10 @@ def get_center(element: Surface | pygame.Rect) -> tuple[int, int]:
         height = element.get_height()
     if width is None or height is None:
         raise TypeError("Element must be pygame.Rect or pygame.Surface")
+    from references import client
     return (
-        references.client.surface.get_width() // 2 - width // 2,
-        references.client.surface.get_height() // 2 - height // 2
+        client.surface.get_width() // 2 - width // 2,
+        client.surface.get_height() // 2 - height // 2
     )
 
 

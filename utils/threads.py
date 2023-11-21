@@ -6,7 +6,6 @@ from typing import Callable
 def thread(daemon: bool = True) -> Callable:
     def handle(func):
         def start_thread(_thread: threading.Thread) -> threading.Thread:
-            # log("Thread starting.", func, color=Color.SUCCESS)
             _thread.start()
             return _thread
 

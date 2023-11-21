@@ -1,44 +1,42 @@
 from pathlib import Path
 from time import time
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
 from pygame import Surface
 
 import references
-from world.collision_type import CollisionType
-from world.facing import Facing
 from core.sound import Sound
 from entities.entity import Entity
 from references import game, client
 from utils.files import get_resources
-from utils.sprites import get_coordinates_with_scroll
-from utils.time_util import times, has_elapsed
-from world.sign import read
-
-if TYPE_CHECKING:
-    from entities.screen import Screen
+from utils.sprites import get_coordinates_with_scroll, draw_with_scroll
+from utils.time_util import has_elapsed
+from world.collision_type import CollisionType
+from world.facing import Facing
 
 
 class PlayerEntity(Entity):
+    facing: Facing
     current_key: str
+    current_sprite: Surface
     motion_ratio: int
     motions: dict[Facing, int]
     __life: int
     velocity: int
-    facing: Facing
+    collision: float
 
     def __init__(self, x: int, y: int):
         super().__init__("Player", Path(get_resources(), "player"), x, y)
-        self.current_sprite = self.sprites["bottom_idle"]
-        self.current_key = "bottom_idle"
+        self.facing = Facing.SOUTH
+        self.current_key = str(self.facing) + "_idle"
+        self.current_sprite = self.sprites[self.current_key]
         self.motion_ratio = 4
         self.motions = {Facing.NORTH: 0, Facing.EAST: 0, Facing.SOUTH: 0, Facing.WEST: 0}
         self.__life = 3
         self.velocity = 4
-        self.facing = Facing.SOUTH
+        self.collision = 0
 
     def draw(self, surface: Surface) -> None:
-        from utils.sprites import draw_with_scroll
         draw_with_scroll(surface, self.sprites["shadow"], self.x + self.width // 2 - self.sprites["shadow"].get_width() // 2, self.y + self.height - 20)
         super().draw(surface)
 
@@ -74,8 +72,8 @@ class PlayerEntity(Entity):
 
         screen_movement: CollisionType = self.collide(motion_x, motion_y, facing)
         if screen_movement == CollisionType.collision:
-            if has_elapsed(times.get("collision", 0), 1):
-                times["collision"] = time()
+            if has_elapsed(self.collision, 1):
+                self.collision = time()
                 if references.game.collision_sound:
                     Sound.bounce.play()
                 self.stop()
@@ -96,15 +94,6 @@ class PlayerEntity(Entity):
         self.compute_scroll(motion_x, motion_y)
         if screen_movement is not None:
             self.change_screen(screen_movement)
-
-    def interact(self) -> None:
-        from entities.screen import ColorManager
-        current_screen: Screen = game.screen
-        mask, mask_offset = self.get_interaction_area(self.facing, current_screen.get_offsets())
-        for i, mask_name in enumerate(ColorManager.get_signs()):
-            if current_screen.masks[mask_name.get_name()].overlap(mask, mask_offset):
-                read(i)
-                return
 
     def compute_scroll(self, x: int, y: int) -> None:
         if not game.screen.border:

@@ -10,6 +10,26 @@ from utils.sprites import load, resize, draw_with_scroll
 
 
 class Entity:
+    """Entity class.
+
+        :ivar name: The name of the entity.
+        :type name: str.
+        :ivar __sprite_location: The location of the entity's sprites.
+        :type __sprite_location: str.
+        :ivar sprites: The entity's sprites.
+        :type sprites: dict[str, Surface].
+        :ivar current_sprite: The current sprite of the entity.
+        :type current_sprite: Surface.
+        :ivar width: The width of the entity.
+        :type width: int.
+        :ivar height: The height of the entity.
+        :type height: int.
+        :ivar x: The x position of the entity.
+        :type x: int.
+        :ivar y: The y position of the entity.
+        :type y: int.
+
+    """
     name: str
     __sprite_location: str
     sprites: dict[str, Surface]
@@ -20,6 +40,18 @@ class Entity:
     y: int
 
     def __init__(self, name: str, sprite_location: str | Path, x: int, y: int):
+        """Constructor method for the Entity class.
+
+            :param name: The name of the entity.
+            :type name: str.
+            :param sprite_location: The location of the entity's sprites.
+            :type sprite_location: str | Path.
+            :param x: The x position of the entity.
+            :type x: int.
+            :param y: The y position of the entity.
+            :type y: int.
+
+        """
         self.name = name
         self.__sprite_location = sprite_location
         self.sprites = {}
@@ -33,21 +65,44 @@ class Entity:
         self.y = y
 
     def draw(self, screen: Surface) -> None:
+        """Draws the entity to the screen.
+
+            :param screen: The screen to draw to.
+            :type screen: Surface.
+
+        """
         draw_with_scroll(screen, self.__current_sprite, self.x, self.y)
 
     @property
     def current_sprite(self) -> Surface:
+        """Returns the current sprite of the entity."""
         return self.__current_sprite
 
     @current_sprite.setter
     def current_sprite(self, value: Surface) -> None:
+        """Sets the current sprite of the entity.
+
+            :param value: The new current sprite.
+            :type value: Surface.
+
+        """
         self.__current_sprite = value
         self.width = value.get_width()
         self.height = value.get_height()
 
     def collide(self, x: int, y: int, facing: Facing) -> CollisionType:
-        import references
-        current_screen = references.game.screen
+        """Checks if the entity collides with the screen.
+
+            :param x: The x offset.
+            :type x: int.
+            :param y: The y offset.
+            :type y: int.
+            :param facing: The facing of the entity.
+            :type facing: Facing.
+
+        """
+        from references import game
+        current_screen = game.screen
         x_offset = -current_screen.x
         y_offset = -current_screen.y
         if facing == Facing.EAST:
@@ -117,6 +172,17 @@ class Entity:
                 return CollisionType.bad_forward
 
     def get_interaction_area(self, facing: Facing, offsets: tuple[int, int]) -> tuple[Mask, tuple[float, float]]:
+        """Returns the interaction area of the entity.
+
+            :param facing: The facing of the entity.
+            :type facing: Facing.
+            :param offsets: The offsets of the entity.
+            :type offsets: tuple[int, int].
+
+            :return: The interaction area of the entity.
+            :rtype: tuple[Mask, tuple[float, float]].
+
+        """
         surface: Optional[Surface] = None
         mask_offset: tuple[float, float] = (0, 0)
         match facing:

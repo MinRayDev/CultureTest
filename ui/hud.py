@@ -11,7 +11,22 @@ from utils.sprites import load, resize
 
 
 class HUD:
-    """Class 'HUD' is the HUD of the game."""
+    """Class 'HUD' is the HUD of the game.
+
+        :ivar width: The width of the HUD.
+        :type width: int.
+        :ivar height: The height of the HUD.
+        :type height: int.
+        :ivar sprites: The sprites of the HUD.
+        :type sprites: dict[str, Surface].
+        :ivar forest_shadow: The forest shadow of the HUD.
+        :type forest_shadow: Surface.
+        :ivar hearts: The hearts of the HUD.
+        :type hearts: list[Surface].
+        :ivar f3_pressed: Whether the F3 key is pressed or not.
+        :type f3_pressed: bool.
+
+    """
     width: int
     height: int
     sprites: dict[str, Surface]
@@ -39,6 +54,7 @@ class HUD:
 
             :param surface: The surface on which the HUD is drawn.
             :type surface: Surface.
+
         """
         x_distance: int = self.width // 30
         default_x: int = self.width - x_distance

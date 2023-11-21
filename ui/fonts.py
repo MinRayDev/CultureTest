@@ -12,6 +12,7 @@ class Fonts(str, enum.Enum):
         Extends 'str' and 'Enum'.
 
         :cvar returnofganon: The returnofganon font.
+        :cvar hyliaserif: The hyliaserif font.
 
     """
     returnofganon = os.path.join(get_fonts(), "ReturnofGanon.ttf")

@@ -16,11 +16,11 @@ from utils.time_util import has_elapsed
 
 if TYPE_CHECKING:
     from pygame.mixer import Channel
-    from entities.player_entity import PlayerEntity
+    from core.player import Player
 
 
 class GameOver(Menu):
-    player: 'PlayerEntity'
+    player: 'Player'
     frame: int
     played: bool
     start_time: float

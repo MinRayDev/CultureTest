@@ -6,6 +6,18 @@ from ui.menu.impl.text_box import TextBox
 
 
 def read(read_type: Literal[0, 1, 2, 3, 4]) -> None:
+    """Read a sign.
+
+        :param read_type: The type of reading.
+        :type read_type: Literal[0, 1, 2, 3, 4]
+
+        0: Read the question.
+        1: Read the first answer.
+        2: Read the second answer.
+        3: Read the third answer.
+        4: Read the end of the game.
+
+    """
     question: Question = game.question
     content: str
     match read_type:
@@ -16,7 +28,6 @@ def read(read_type: Literal[0, 1, 2, 3, 4]) -> None:
             game.menu = TextBox(content, client.surface, True)
             return
         case _:
-            answers: list[str] = question.bad_answers
             if read_type == question.correct:
                 content = question.good_answer
             else:
@@ -31,5 +42,5 @@ def read(read_type: Literal[0, 1, 2, 3, 4]) -> None:
                             answer_index = 1
                     case 3:
                         answer_index = 1 if read_type > 1 else 0
-                content = answers[answer_index]
+                content = question.bad_answers[answer_index]
     game.menu = TextBox(content, client.surface, False)

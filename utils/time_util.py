@@ -1,7 +1,5 @@
 import time
 
-times: dict[str, float] = {}
-
 
 def has_elapsed(start_time: float, interval_duration: float) -> bool:
     """Returns True if the time 'start_time' added to the interval duration elapsed.
