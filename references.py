@@ -1,9 +1,7 @@
-from typing import Optional
-
 from core.client import Client
 from core.game import Game
-from entities.player import Player
+from ui.menu.impl.over_transition import load_rads
 
-player: Optional[Player] = None
 client: Client = Client()
 game: Game = Game()
+load_rads(client.surface.get_width(), client.surface.get_height())

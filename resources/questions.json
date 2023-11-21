@@ -1,3 +1,1 @@
-[
-  {"text": "Quelle est la capitale de la France ?", "answers": {"Paris": true, "Lyon": false, "Marseille": false}}
-]
+[{"text": "Quelle est la capitale de la France ?", "answers": {"Paris": true, "Lyon": false, "Marseille": false}}, {"text": "awa", "answers": {"bbwb": false, "ccwc": true, "ddwd": false}}, {"text": "e", "answers": {"f": false, "g": true, "h": false}}, {"text": "g", "answers": {"f": false, "df": false, "a": true}}]

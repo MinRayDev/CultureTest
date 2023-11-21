@@ -1,39 +1,28 @@
+from typing import Protocol
+
 import pygame
 from pygame.event import Event
 
 
 class Element:
-    """Class 'Element' is the base class for all elements.
+    """Class 'Element' is the  class for all elements.
 
-        :ivar x: The x position of the element.
-        :type x: int.
-        :ivar y: The y position of the element.
-        :type y: int.
-        :ivar __width: The width of the element.
-        :type __width: int.
-        :ivar __height: The height of the element.
-        :type __height: int.
         :ivar rectangle: The rectangle of the element.
         :type rectangle: pygame.Rect.
         :ivar is_hover: Whether the element is hovered or not.
         :type is_hover: bool.
 
     """
-    x: int
-    y: int
-    __width: int
-    __height: int
     rectangle: pygame.Rect
     is_hover: bool
 
-    def __init__(self, x: int | str, y: int | str, width: int, height: int, rectangle: pygame.Rect = None):
-        from references import client
+    def __init__(self, x: int, y: int, width: int = None, height: int = None, rectangle: pygame.Rect = None):
         """Constructor of the class 'Element'.
 
             :param x: The x position of the element.
-            :type x: int | str.
+            :type x: int.
             :param y: The y position of the element.
-            :type y: int | str.
+            :type y: int.
             :param width: The width of the element.
             :type width: int.
             :param height: The height of the element.
@@ -42,59 +31,76 @@ class Element:
             :type rectangle: pygame.Rect.
 
         """
-        if isinstance(x, str):
-            if x == "CENTER":
-                self.x = client.surface.get_width() // 2 - width // 2
-            else:
-                raise ValueError(f"Invalid x position: {x}")
-        else:
-            self.x: int = x
-        if isinstance(y, str):
-            if y == "CENTER":
-                self.y = client.surface.get_height() // 2 - height // 2
-            else:
-                raise ValueError(f"Invalid x position: {x}")
-        else:
-            self.y: int = y
-        self.__width: int = width
-        self.__height: int = height
         self.is_hover: bool = False
+        if rectangle is None and (width is None or height is None):
+            raise ValueError("Either rectangle or width and height must be given.")
         if rectangle is not None:
             self.rectangle: pygame.Rect = rectangle
+            rectangle.x = x
+            rectangle.y = y
+            if width != -1 and width is not None:
+                rectangle.width = width
+            if height != -1 and height is not None:
+                rectangle.height = height
         else:
-            self.rectangle: pygame.Rect = pygame.Rect(self.x, self.y, width, height)
+            self.rectangle: pygame.Rect = pygame.Rect(x, y, width, height)
+
+    @property
+    def x(self) -> int:
+        """Getter for the x position of the element."""
+        return self.rectangle.x
+
+    @x.setter
+    def x(self, value: int):
+        """Setter for the x position of the element."""
+        self.rectangle.x = value
+
+    @property
+    def y(self) -> int:
+        """Getter for the y position of the element."""
+        return self.rectangle.y
+
+    @y.setter
+    def y(self, value: int):
+        """Setter for the y position of the element."""
+        self.rectangle.y = value
 
     @property
     def width(self) -> int:
         """Getter for the width of the element."""
-        return self.__width
+        return self.rectangle.width
 
     @property
     def height(self) -> int:
         """Getter for the height of the element."""
-        return self.__height
+        return self.rectangle.height
 
     @width.setter
     def width(self, value: int):
         """Setter for the width of the element."""
-        self.__width = value
+        self.rectangle.width = value
 
     @height.setter
     def height(self, value: int):
         """Setter for the height of the element."""
-        self.__height = value
+        self.rectangle.height = value
 
-    def activity(self, events: list[Event]) -> None:
+    def activity(self, events: dict[int, list[Event]]) -> None:
+        """Method 'activity' is called every frame to update the element.
+
+            :param events: The list of events.
+            :type events: list[Event].
+        """
         ...
 
-    def draw(self, surface: pygame.Surface) -> None:
+    def draw(self, surface: pygame.Surface, **kwargs) -> None:
         """Method 'draw' is called every frame to draw the element.
 
             :param surface: The surface to draw the element on.
             :type surface: pygame.Surface.
 
         """
-        pass
+        ...
 
     def click(self) -> None:
         """Method 'click' is called when the element is clicked."""
@@ -108,3 +114,12 @@ class Element:
 
         """
         return pygame.SYSTEM_CURSOR_HAND if self.rectangle.collidepoint(pygame.mouse.get_pos()) else None
+
+    def get_coords(self) -> tuple[int, int]:
+        """Method 'get_coords' returns the coordinates of the element.
+
+            :return: The coordinates of the element.
+            :rtype: tuple[int, int].
+
+        """
+        return self.rectangle.x, self.rectangle.y
