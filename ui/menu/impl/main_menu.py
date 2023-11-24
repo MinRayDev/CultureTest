@@ -16,6 +16,7 @@ from ui.menu.menu import Menu
 from utils.files import get_menus
 from utils.sprites import get_center, get_shine_pos
 from utils.time_util import has_elapsed
+from decimal import Decimal
 
 if TYPE_CHECKING:
     from pygame.mixer import Channel
@@ -25,10 +26,11 @@ class MainMenu(Menu):
     background: Background
     title: Title
     sword: Sword
+    shine_index: Decimal
+    shine_end: float
+    shines: dict[Decimal, Shine]
     triforce: Triforce
     already_played: bool
-    values: dict[str, int | tuple[int, int, int] | float]
-    shines: dict[float, Shine]
     start_text: BlinkText
     init_time: float
 
@@ -39,15 +41,15 @@ class MainMenu(Menu):
         title: Surface = self.sprites["title"]
         self.title = Title(title, self.sprites["title_over"], get_center(title))
         self.sword = Sword(self.sprites["sword"], int(background.get_width()/5.5) + self.background.x)
-        self.shine_index = 0
+        self.shine_index = Decimal("0")
         self.shine_end = 0
         # time: count, pos
         shines: dict[str, Surface] = {f"shine{i}": self.sprites[f"shine{i}"] for i in range(11)}
         self.shines = {
-            0: Shine(shines, get_shine_pos(148, 66, self.title.x, self.title.y, 7.5)),
-            1.2: Shine(shines, get_shine_pos(105, 24, self.title.x, self.title.y, 7.5)),
-            2.4: Shine(shines, get_shine_pos(64, 64, self.title.x, self.title.y, 7.5)),
-            3.6: Shine(shines, get_shine_pos(5, 28, self.title.x, self.title.y, 7.5))
+            Decimal("0"): Shine(shines, get_shine_pos(148, 66, self.title.x, self.title.y, 7.5)),
+            Decimal("1.2"): Shine(shines, get_shine_pos(105, 24, self.title.x, self.title.y, 7.5)),
+            Decimal("2.4"): Shine(shines, get_shine_pos(64, 64, self.title.x, self.title.y, 7.5)),
+            Decimal("3.6"): Shine(shines, get_shine_pos(5, 28, self.title.x, self.title.y, 7.5))
         }
         triangles: dict[str, Surface] = {}
         for i in range(171):
@@ -104,17 +106,13 @@ class MainMenu(Menu):
         if has_elapsed(self.init_time, 6.6) and has_elapsed(self.shine_end, self.shine_index):
             shine: Shine = self.shines[self.shine_index]
             shine.sprite_index += 2
-            if self.shine_index == 0:
+            if self.shine_index == Decimal("0"):
                 self.shine_end = time.time()
             if shine.is_ended():
                 shine.sprite_index = 0
-                self.shine_index += 1.2
-
-                if len(str(self.shine_index)) > 3:
-                    self.shine_index = round(self.shine_index, 1)
-
-                if self.shine_index > 3.6:
-                    self.shine_index = 0
+                self.shine_index += Decimal("1.2")
+                if self.shine_index > Decimal("3.6"):
+                    self.shine_index = Decimal("0")
 
     def play(self, channel: 'Channel', loops: int = 0):
         if not self.already_played:
